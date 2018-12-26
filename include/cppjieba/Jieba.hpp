@@ -12,18 +12,8 @@ class Jieba {
         const string& model_path,
         const string& user_dict_path, 
         const string& idfPath, 
-        const string& stopWordPath) 
-    : dict_trie_(dict_path, user_dict_path),
-      model_(model_path),
-      mp_seg_(&dict_trie_),
-      hmm_seg_(&model_),
-      mix_seg_(&dict_trie_, &model_),
-      full_seg_(&dict_trie_),
-      query_seg_(&dict_trie_, &model_),
-      extractor(&dict_trie_, &model_, idfPath, stopWordPath) {
-  }
-  ~Jieba() {
-  }
+        const string& stopWordPath); 
+  ~Jieba();
 
   struct LocWord {
     string word;
@@ -31,84 +21,36 @@ class Jieba {
     size_t end;
   }; // struct LocWord
 
-  void Cut(const string& sentence, vector<string>& words, bool hmm = true) const {
-    mix_seg_.Cut(sentence, words, hmm);
-  }
-  void Cut(const string& sentence, vector<Word>& words, bool hmm = true) const {
-    mix_seg_.Cut(sentence, words, hmm);
-  }
-  void CutAll(const string& sentence, vector<string>& words) const {
-    full_seg_.Cut(sentence, words);
-  }
-  void CutAll(const string& sentence, vector<Word>& words) const {
-    full_seg_.Cut(sentence, words);
-  }
-  void CutForSearch(const string& sentence, vector<string>& words, bool hmm = true) const {
-    query_seg_.Cut(sentence, words, hmm);
-  }
-  void CutForSearch(const string& sentence, vector<Word>& words, bool hmm = true) const {
-    query_seg_.Cut(sentence, words, hmm);
-  }
-  void CutHMM(const string& sentence, vector<string>& words) const {
-    hmm_seg_.Cut(sentence, words);
-  }
-  void CutHMM(const string& sentence, vector<Word>& words) const {
-    hmm_seg_.Cut(sentence, words);
-  }
-  void CutSmall(const string& sentence, vector<string>& words, size_t max_word_len) const {
-    mp_seg_.Cut(sentence, words, max_word_len);
-  }
-  void CutSmall(const string& sentence, vector<Word>& words, size_t max_word_len) const {
-    mp_seg_.Cut(sentence, words, max_word_len);
-  }
+  void Cut(const string& sentence, vector<string>& words, bool hmm = true) const;
+  void Cut(const string& sentence, vector<Word>& words, bool hmm = true) const;
+  void CutAll(const string& sentence, vector<string>& words) const;
+  void CutAll(const string& sentence, vector<Word>& words) const;
+  void CutForSearch(const string& sentence, vector<string>& words, bool hmm = true) const;
+  void CutForSearch(const string& sentence, vector<Word>& words, bool hmm = true) const;
+  void CutHMM(const string& sentence, vector<string>& words) const;
+  void CutHMM(const string& sentence, vector<Word>& words) const;
+  void CutSmall(const string& sentence, vector<string>& words, size_t max_word_len) const;
+  void CutSmall(const string& sentence, vector<Word>& words, size_t max_word_len) const;
   
-  void Tag(const string& sentence, vector<pair<string, string> >& words) const {
-    mix_seg_.Tag(sentence, words);
-  }
-  string LookupTag(const string &str) const {
-    return mix_seg_.LookupTag(str);
-  }
-  bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG) {
-    return dict_trie_.InsertUserWord(word, tag);
-  }
+  void Tag(const string& sentence, vector<pair<string, string> >& words) const;
+  string LookupTag(const string &str) const;
+  bool InsertUserWord(const string& word, const string& tag = UNKNOWN_TAG);
 
-  bool InsertUserWord(const string& word,int freq, const string& tag = UNKNOWN_TAG) {
-    return dict_trie_.InsertUserWord(word,freq, tag);
-  }
+  bool InsertUserWord(const string& word,int freq, const string& tag = UNKNOWN_TAG);
 
-  bool Find(const string& word)
-  {
-    return dict_trie_.Find(word);
-  }
+  bool Find(const string& word);
 
-  void ResetSeparators(const string& s) {
-    //TODO
-    mp_seg_.ResetSeparators(s);
-    hmm_seg_.ResetSeparators(s);
-    mix_seg_.ResetSeparators(s);
-    full_seg_.ResetSeparators(s);
-    query_seg_.ResetSeparators(s);
-  }
+  void ResetSeparators(const string& s);
 
-  const DictTrie* GetDictTrie() const {
-    return &dict_trie_;
-  } 
+  const DictTrie* GetDictTrie() const;
   
-  const HMMModel* GetHMMModel() const {
-    return &model_;
-  }
+  const HMMModel* GetHMMModel() const;
 
-  void LoadUserDict(const vector<string>& buf)  {
-    dict_trie_.LoadUserDict(buf);
-  }
+  void LoadUserDict(const vector<string>& buf);
 
-  void LoadUserDict(const set<string>& buf)  {
-    dict_trie_.LoadUserDict(buf);
-  }
+  void LoadUserDict(const set<string>& buf);
 
-  void LoadUserDict(const string& path)  {
-    dict_trie_.LoadUserDict(path);
-  }
+  void LoadUserDict(const string& path);
 
  private:
   DictTrie dict_trie_;

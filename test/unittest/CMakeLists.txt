@@ -18,7 +18,7 @@ ADD_EXECUTABLE(test.run
 )
 
 if(MSVC)
-	TARGET_LINK_LIBRARIES(test.run gtest)
+	TARGET_LINK_LIBRARIES(test.run gtest jieba_pinyin)
 else()
-	TARGET_LINK_LIBRARIES(test.run gtest pthread)
+	TARGET_LINK_LIBRARIES(test.run gtest pthread jieba_pinyin)
 endif()

@@ -1,7 +1,8 @@
-PROJECT(CPPJIEBA)
+PROJECT(CPPJIEBA LANGUAGES C CXX)
 
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps
   ${PROJECT_SOURCE_DIR}/include)
 
@@ -19,6 +20,20 @@ endif()
 #     ADD_DEFINITIONS(-DCPPJIEBA_${ENC})
 # ENDIF()
 
+set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
+
+set(CMAKE_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 \
+    -Wall -Wno-sign-compare -Wno-unused-local-typedefs \
+    -Wno-deprecated-declarations -Winit-self -Wno-deprecated-register \
+    -Wno-uninitialized \
+    -msse -msse2 -pthread \
+    -DHAVE_EXECINFO_H=1 -DHAVE_CXXABI_H \
+    -g")
+
+    ADD_LIBRARY(jieba_pinyin SHARED ${PROJECT_SOURCE_DIR}/include/cppjieba/Jieba.cpp)
+target_link_libraries(jieba_pinyin m pthread dl)
 ADD_SUBDIRECTORY(deps)
 ADD_SUBDIRECTORY(test)
 

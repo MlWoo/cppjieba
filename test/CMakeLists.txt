@@ -1,5 +1,9 @@
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+#ET(JIEBAPINYIN jiebapin
 
+#FIND_LIBRARY(
 ADD_EXECUTABLE(demo demo.cpp)
+TARGET_LINK_LIBRARIES(demo jieba_pinyin)
 ADD_EXECUTABLE(load_test load_test.cpp)
+TARGET_LINK_LIBRARIES(load_test jieba_pinyin)
 ADD_SUBDIRECTORY(unittest)
